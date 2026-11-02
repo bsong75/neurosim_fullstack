@@ -1,0 +1,7 @@
+Documents/
+results/
+**/__pycache__/
+**/*.o
+Inference_pytorch/NeuroSIM/main
+Inference_pytorch/layer_record_*/
+Inference_pytorch/log/default/

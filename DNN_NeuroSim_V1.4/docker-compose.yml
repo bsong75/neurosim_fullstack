@@ -1,0 +1,32 @@
+services:
+  # Simulator: run on demand with `docker compose run --rm neurosim <inference.py args>`
+  neurosim:
+    build: .
+    image: dnn-neurosim:1.4
+    profiles: [sim]
+    shm_size: 2gb
+    volumes:
+      - ./results:/app/Inference_pytorch/results
+      - datasets:/tmp/public_dataset
+      - torch-cache:/cache/torch
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+  # Results dashboard: `docker compose up -d dashboard`, then open http://localhost:8080
+  dashboard:
+    build: ./dashboard
+    image: dnn-neurosim-dashboard
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./results:/results:ro
+    restart: unless-stopped
+
+volumes:
+  datasets:
+  torch-cache:
